@@ -19,11 +19,18 @@ public class WebDriverTestRule implements TestRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                driver.set(new FirefoxDriver());
-                statement.evaluate();
-                closeDriverSafely();
+                createDriver();
+                try {
+                    statement.evaluate();
+                } finally {
+                    closeDriverSafely();
+                }
             }
         };
+    }
+
+    private void createDriver() {
+        driver.set(new FirefoxDriver());
     }
 
     private void closeDriverSafely() {
